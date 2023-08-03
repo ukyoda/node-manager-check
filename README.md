@@ -1,4 +1,4 @@
-# Node Manager Check
+# Node Manager Switcher
 
 これはNode.jsのバージョン管理ツールを、シェル起動時に選択して使い分けることができるツールです。
 
