@@ -1,5 +1,5 @@
 use std::path::Path;
-use std::fs;
+use std::{env, fs};
 extern crate serde;
 extern crate serde_json;
 use serde::Deserialize;
@@ -8,6 +8,7 @@ fn main() {
     let has_volta = check_has_volta_config("package.json");
     let has_nvm = check_has_nvm_config(".nvmrc");
     let has_nodenv = check_has_nvm_config(".node-version");
+    
     if has_volta {
         println!("volta");
     } else if has_nvm {
@@ -15,7 +16,24 @@ fn main() {
     } else if has_nodenv {
         println!("nodenv");
     } else {
-        println!("nothing");
+        let env_value = get_env_value();
+        match env_value {
+            Some(string) => {
+                println!("{}", string)
+            },
+            None => {
+                println!("nothing")
+            }
+        }
+    }
+}
+
+fn get_env_value() -> Option<String> {
+    let value = env::var("DEFAULT_NODE_MGR")
+        .unwrap_or("nothing".to_string());
+    match value.as_str() {
+        "volta" | "nvm" | "nodenv" => Some(value),
+        _ => None
     }
 }
 
